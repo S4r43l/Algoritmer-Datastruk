@@ -13,7 +13,7 @@ int main()
 	long double Factorial(int n);
 	int Fibonacci(int n);
 
-	cout << "Write 1 for factorial and 2 for fibonacci" << endl;
+	cout << "Write 1 for Factorial and 2 for 2 Fibonacci" << endl;
 	cin >> a;
 
 	if (a == 1) 
@@ -46,15 +46,23 @@ int main()
 			main();
 		}
 
-		cout << "First " << n << " of the fibonacci secuence is" << endl;
+		cout << "First " << n << " of the fibonacci sequence is" << endl;
 		while (i < n)
 		{
 			cout << Fibonacci(i) << endl;
 		i++;
 		}
 	}
+	else if (cin.fail())
+	{
+		cout << endl << "Invalid input" << endl << endl;
+		// Clear the error state and flush the input buffer
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		main(); 
+	}
 	else {
-		cout << "Error: 1 or 2 not detected, try again" << endl << endl;
+		cout << endl << "Invalid input" << endl << endl;
 
 		main();
 	}
