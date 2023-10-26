@@ -1,4 +1,5 @@
 ﻿  Compulsory 3.cpp
-C:\Users\selau\Desktop\Algoritmer-Datastruk\Compulsory 3\Compulsory 3\Compulsory 3.cpp(145,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\selau\Desktop\Algoritmer-Datastruk\Compulsory 3\Compulsory 3\Compulsory 3.cpp(217,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  Compulsory 3.vcxproj -> C:\Users\selau\Desktop\Algoritmer-Datastruk\Compulsory 3\x64\Debug\Compulsory 3.exe
+C:\Users\feeli\Desktop\Semester 3\Datastructures\Algoritmer-Datastruk\Compulsory 3\Compulsory 3\Compulsory 3.cpp(130,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\feeli\Desktop\Semester 3\Datastructures\Algoritmer-Datastruk\Compulsory 3\Compulsory 3\Compulsory 3.cpp(202,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\feeli\Desktop\Semester 3\Datastructures\Algoritmer-Datastruk\Compulsory 3\Compulsory 3\Compulsory 3.cpp(547,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Compulsory 3.vcxproj -> C:\Users\feeli\Desktop\Semester 3\Datastructures\Algoritmer-Datastruk\Compulsory 3\x64\Debug\Compulsory 3.exe

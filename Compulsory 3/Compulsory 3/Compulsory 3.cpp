@@ -14,6 +14,8 @@ public:
     int data;
 	TreeNode* parent;
 	vector<TreeNode*>child;
+    
+
 
     //Insertion
     TreeNode* CreateTreeNode(int data, TreeNode* parent)
@@ -31,24 +33,6 @@ public:
         return newNode;
     }
 
-    //void InsertRandomNode(int data, TreeNode* tree)
-    //{
-    //    TreeNode* newNode = CreateTreeNode(data, tree); //create new
-
-    //    int random= rand() % (tree->child.size() + 1); //random number between 0 and the number of children
-
-    //    auto placement = tree->child.begin(); //iterator
-
-    //    for (int i = 0; i < random; ++i) { //inserts the node in a random position
-    //        if (placement == tree->child.end()) {
-
-    //            break;
-    //        }
-    //        ++placement;
-    //    }
-    //    tree->child.insert(placement, newNode); //inserts the node
-    //}
-
     //Deletion (deletes node + all children and their decendants
     void DeleteNode(TreeNode* tree)
     {
@@ -60,8 +44,9 @@ public:
 
         if (tree != nullptr && tree->parent != nullptr)
         {
-            //removes the node
+            
             tree->parent->child.erase(remove(tree->parent->child.begin(), tree->parent->child.end(), tree), tree->parent->child.end());
+
             //deletes the node
             delete tree;
 
@@ -71,7 +56,7 @@ public:
         {
             cout << "Can't delete the root" << endl << endl;
         }
-        cout << endl;
+
     }
 
 
@@ -229,18 +214,71 @@ public:
 
 
 
-		/*  Graphs  */
-class Graph
+		/*  Graphs - Using Adjacency Matrix  */
+class GraphMatrix
 {
+    struct GraphNodeForMatrix
+    {
+        string data;
+    };
+
+    vector<GraphNodeForMatrix> nodes;
+
     vector<vector<int>> adjacencyMatrix;
 
+
 public:
-    Graph(int size) //set the size (number of vertices)
+
+    GraphMatrix(int size) //set the size (number of vertices)
     {
         adjacencyMatrix.assign(size, vector<int>(size, 0));
+        nodes.resize(size);  // Resize the "'"nodes" vector to match the size of the graph (Used to store data)
     }
 
     //insertion
+
+    void addInfoInNodes(string info, int vertex)
+    {
+        if (vertex >= 0 && vertex < nodes.size())
+        {
+			nodes[vertex].data = info;
+		}
+        else
+        {
+			cout << "invalid vertex" << endl << endl;
+		}
+    }
+
+    void changeInfoForNodes(string data, int index) //to change the data of a node (info is stored in a vector with the following index as the vertex in the matrix)
+    {
+        if (index >= 0 && index < nodes.size())
+        {
+            nodes[index].data = data;
+        }
+        else
+        {
+            cout << "Invalid index" << endl << endl;
+        }
+	}
+
+    void addVertex() //to add a vertex to the graph
+    {
+        for (int i = 0; i < adjacencyMatrix.size(); i++)
+        {
+            adjacencyMatrix[i].push_back(0);
+        }
+
+        vector<int> temp(adjacencyMatrix.size() + 1, 0);
+        adjacencyMatrix.push_back(temp);
+
+        // Add a default empty string for the new vertex.
+        nodes.push_back(GraphNodeForMatrix{ "" });
+
+        cout << "Vertex added" << endl << endl;
+
+
+    }
+
     void addEdge(int from, int to, int weight) //to add an edge between two vertices
     {
         if (from >= 0 && from < adjacencyMatrix.size() && to >= 0 && to < adjacencyMatrix.size())
@@ -267,12 +305,65 @@ public:
 
 	}
 
-    //Access functions
-    void VertexInfo() 
+    void deletionOfNode(int vertex) 
     {
+        //need to see in the matrix if there is any edges connected to the vertex and set them to 0 (which is no vaule) and then remove from the info vector (nodes)
+        if (vertex >= 0 && vertex < adjacencyMatrix.size())
+        {
+            for (int i = 0; i < adjacencyMatrix.size(); i++)
+            {
+				adjacencyMatrix[vertex][i] = 0;
+				adjacencyMatrix[i][vertex] = 0;
+			}
+			
+            if (vertex >= 0 && vertex < nodes.size())
+            {
+                changeInfoForNodes("no data/deleted", vertex);
+            }
+            else
+            {
+				cout << "Something went wrong" << endl;
+			}
 
+		}
+        else
+        {
+			cout << "invalid vertex" << endl << endl;
+		}
     }
 
+    //Access functions
+    void VertexInfo(int vertex)
+    {
+        if (vertex >= 0 && vertex < adjacencyMatrix.size())
+        {
+            cout << "Vertex " << vertex << " Information: " << endl;
+            cout << "Edges connected to this vertex:" << endl;
+
+            for (int i = 0; i < adjacencyMatrix.size(); i++)
+            {
+                if (adjacencyMatrix[vertex][i] != 0)
+                {
+                    cout << "To vertex " << i << " with weight " << adjacencyMatrix[vertex][i] << endl;
+                }
+            }
+
+            if (vertex >= 0 && vertex < nodes.size())
+            {
+                cout << "Data: " << nodes[vertex].data << endl; // Use dot notation to access 'data'.
+            }
+            else
+            {
+                cout << "No data" << endl;
+            }
+        }
+        else
+        {
+            cout << "Invalid vertex" << endl;
+        }
+        cout << endl;
+    }
+    
     void GetAdjacent(int vertex) //to get the adjacent vertices of a vertex
     {
         if (vertex >= 0 && vertex < adjacencyMatrix.size())
@@ -324,16 +415,33 @@ public:
 
     void isEmpty() //to check if the graph is empty
     {
-        if (adjacencyMatrix.size() == 0)
+        bool empty = true;
+        for (int i = 0; i < adjacencyMatrix.size(); i++)
         {
-			cout << "The graph is empty" << endl << endl;
-		}
-       
-        {
-			cout << "The graph is not empty" << endl << endl;
-		}
-	}
+            for (int j = 0; j < adjacencyMatrix.size(); j++)
+            {
+                if (adjacencyMatrix[i][j] != 0)
+                {
+                    empty = false;
+                    break;
+                }
+            }
+            if (!empty) {
+                break;
+            }
+        }
 
+        if (empty)
+        {
+            cout << "The graph is empty" << endl << endl;
+        }
+        else
+        {
+            cout << "The graph is not empty" << endl << endl;
+        }
+    }
+
+   
     //Traversal
     void BFS(int start) //Breadth First Search
     {
@@ -358,7 +466,7 @@ public:
 
             for (int i = 0; i < adjacencyMatrix.size(); i++)
             {
-                if (adjacencyMatrix[current][i] == 1 && !visited[i])
+                if (adjacencyMatrix[current][i] != 0 && !visited[i])
                 {
                     queueBFS.push(i);
                     visited[i] = true;
@@ -367,12 +475,78 @@ public:
         }
     }
           
+
+    //just to make it easier to see how the graph looks like (displays the matrix)
+    void PrintTheMatrix(int size) {
+        int i, j;
+        for (i = 0; i < size; i++) {
+            for (j = 0; j < size; j++) {
+                cout << adjacencyMatrix[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
 };
 
 
+/*  Graphs - Using List Adjacency   */
+class GraphList
+{
+public:
+	
+    struct GraphNode
+    {
+        int data;
+        int weight;
+        vector<GraphNode*> adjacencyList;
+        bool visited = false;
+    };
+    
+
+    //Create node
+    GraphNode* CreateNode(int data, GraphNode* Node, int weight)
+    {
+		GraphNode* newNode = new GraphNode();
+
+		newNode->data = data;
+		newNode->weight = weight;
+        
+
+        if (Node != nullptr)
+        {
+            newNode->adjacencyList.push_back(Node);
+            Node->adjacencyList.push_back(newNode);
+		}
+        return newNode;
+	}
+
+ //   void addEdge(int from, int to, int weight) //to add an edge between two vertices
+ //   {
+ //       if (from >= 0 && from < adjacencyList.size() && to >= 0 && to < adjacencyList.size())
+ //       {
+	//		adjacencyList[from][to] = weight;
+	//	}
+ //       else
+ //       {
+	//		cout << "invalid edge" << endl << endl;
+	//	}
+	//}
+
+    //void deleteEdge(int from, int to) //to delete an edge between two vertices (between "from" to "to")
+    //{
+    //    if (from >= 0 && from < adjacencyList.size() && to >= 0 && to < adjacencyList.size())
+    //    {
+
+    //    }
+    //}
+
+ };
+
 int main()
 {
-    
+    srand(time(0));
+    cout <<  "Tree:" << endl;
+
 			/*  TREE */
     TreeNode t;
 
@@ -382,36 +556,42 @@ int main()
     TreeNode* ThirdChild = t.CreateTreeNode(3, root);
     TreeNode* FourthChild = t.CreateTreeNode(4, SecondChild);
     TreeNode* FifthChild = t.CreateTreeNode(5, SecondChild);
+    TreeNode* Sixth = t.CreateTreeNode(5, FifthChild);
 
-    //t.InsertRandomNode(8, root); 
-    t.GetChildren(root); 
+    t.GetChildren(SecondChild); 
+    t.GetChildren(FirstChild);
+    t.GetChildren(ThirdChild);
+    t.GetChildren(FourthChild);
+    t.GetChildren(FifthChild);
+    t.GetChildren(root);
 
+    t.PreorderTraversal(root);
+
+    t.DeleteNode(SecondChild);
+
+    t.PreorderTraversal(root);
     
            /* Functions to use for Trees*/
 
     //t.GetRoot(INSERTANODE);
-
     //t.GetChildren(INSERTANODE);
-   
     //t.GetParent(INSERTANODE);
-
     //t.Size(INSERTANODE);
-
     //t.Depth(INSERTANODE);
-
     //t.isEmpety(INSERTANODE);
-
     //t.isRoot(INSERTANODE);
-
     //t.isLeaf(INSERTANODE)
-
     //t.DeleteNode(INSETANODE);
-
     //t.PreorderTraversal(INSERTANODE);
 
-         /* GRAPH*/
-    int graphSize = 4;
-    Graph g(graphSize);
+    cout << endl << "Graph:" << endl;
+
+         /* GRAPH using matrix*/
+    int graphSize = 4; //sets amount of start vertixes
+    int checknewsize= graphSize;
+    GraphMatrix g(graphSize); //makes graph
+     
+    g.isEmpty();
 
     //adds 4 edges between 4 vertices
     g.addEdge(0, 1, 2);
@@ -423,9 +603,72 @@ int main()
     g.addEdge(1, 3, 1);
     g.addEdge(0, 2, 2);
 
+    g.PrintTheMatrix(graphSize); //just to visualize
+
+    g.addInfoInNodes("I am zero data",0);
+    g.addInfoInNodes("I am number one data",1);
+    g.addInfoInNodes("I am that two", 2);
+    g.addInfoInNodes("I am a three", 3);
+
+    g.VertexInfo(0);
+    g.VertexInfo(1);
+    g.VertexInfo(2);
+    g.VertexInfo(3);
+
+    g.VerticesInGraph();
+    g.EdgesInGraph();
+    
     //does a BSF traversal at 0
     cout << "BFS: " << endl;
     g.BFS(0);
     cout << endl << endl;
 
+  /*  g.deleteEdge(0, 1);
+    g.deleteEdge(1, 2);
+    g.deleteEdge(2, 3);
+    g.deleteEdge(3, 0);
+    g.deleteEdge(1, 3);
+    g.deleteEdge(0, 2);*/
+
+    //g.GetAdjacent(0);
+
+    g.deletionOfNode(2);
+
+    g.VertexInfo(0);
+    g.VertexInfo(1);
+    g.VertexInfo(2);
+    g.VertexInfo(3);
+
+    g.isEmpty();
+
+    //does a BSF traversal at 0
+    cout << "BFS: " << endl;
+    g.BFS(0);
+    cout << endl << endl;
+
+    g.PrintTheMatrix(graphSize); //just to visualize
+
+    g.addVertex(); //adds a vertex
+    checknewsize = checknewsize + 1;
+
+    g.PrintTheMatrix(checknewsize+1); //just to visualize
+
+    		/* Functions to use for Graphs*/
+    //Graph g(graphSize);
+    //g.addInfoInNodes(Vertix_index); //vertix_index is from 0 to size-1 of the graph (ex. 0-3 for a graph with 4 vertices)
+    //g.addEdge(FromVertix, ToVertix, Weight);
+    //g.deleteEdge(FromVertix, ToVertix);
+    //g.deletionOfNode(Vertix_index);
+    //g.VertexInfo(Vertix);
+    //g.GetAdjacent(Vertix);
+    //g.VerticesInGraph();
+    //g.EdgesInGraph();
+    //g.size();
+    //g.isEmpty();
+    //g.BFS(StartVertix);
+    //g.displayMatrix(graphSize);
+
+    //adds a vertex:
+    /*g.addVertex();
+    checknewsize = checknewsize + 1;*/
 }
