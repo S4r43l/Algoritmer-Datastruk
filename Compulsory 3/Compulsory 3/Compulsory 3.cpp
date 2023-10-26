@@ -1,10 +1,12 @@
 // Compulsory 3.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// Sara Emilie Lauvstad
 
 #include <iostream>
 #include <stack>
 #include <vector>
 #include <queue>
+#include <ctime>
+
 using namespace std;
 
 		/*  TREES  */
@@ -36,7 +38,7 @@ public:
     //Deletion (deletes node + all children and their decendants
     void DeleteNode(TreeNode* tree)
     {
-        // Delete the children and their descendants first
+        // Deal with the children first
         while (!tree->child.empty())
         {
             DeleteNode(tree->child.back());
@@ -261,7 +263,7 @@ public:
         }
 	}
 
-    void addVertex() //to add a vertex to the graph
+    void addVertex() //to add a vertices to the graph
     {
         for (int i = 0; i < adjacencyMatrix.size(); i++)
         {
@@ -305,7 +307,7 @@ public:
 
 	}
 
-    void deletionOfNode(int vertex) 
+    void deletionOfNode(int vertex) //deletes a vetex
     {
         //need to see in the matrix if there is any edges connected to the vertex and set them to 0 (which is no vaule) and then remove from the info vector (nodes)
         if (vertex >= 0 && vertex < adjacencyMatrix.size())
@@ -476,8 +478,9 @@ public:
     }
           
 
-    //just to make it easier to see how the graph looks like (displays the matrix)
+    //just to make it easier to see how the graph looks like (displays the matrix) (NB: only at size = graphsize that is set in the main)
     void PrintTheMatrix(int size) {
+        cout << endl;
         int i, j;
         for (i = 0; i < size; i++) {
             for (j = 0; j < size; j++) {
@@ -488,59 +491,6 @@ public:
     }
 };
 
-
-/*  Graphs - Using List Adjacency   */
-class GraphList
-{
-public:
-	
-    struct GraphNode
-    {
-        int data;
-        int weight;
-        vector<GraphNode*> adjacencyList;
-        bool visited = false;
-    };
-    
-
-    //Create node
-    GraphNode* CreateNode(int data, GraphNode* Node, int weight)
-    {
-		GraphNode* newNode = new GraphNode();
-
-		newNode->data = data;
-		newNode->weight = weight;
-        
-
-        if (Node != nullptr)
-        {
-            newNode->adjacencyList.push_back(Node);
-            Node->adjacencyList.push_back(newNode);
-		}
-        return newNode;
-	}
-
- //   void addEdge(int from, int to, int weight) //to add an edge between two vertices
- //   {
- //       if (from >= 0 && from < adjacencyList.size() && to >= 0 && to < adjacencyList.size())
- //       {
-	//		adjacencyList[from][to] = weight;
-	//	}
- //       else
- //       {
-	//		cout << "invalid edge" << endl << endl;
-	//	}
-	//}
-
-    //void deleteEdge(int from, int to) //to delete an edge between two vertices (between "from" to "to")
-    //{
-    //    if (from >= 0 && from < adjacencyList.size() && to >= 0 && to < adjacencyList.size())
-    //    {
-
-    //    }
-    //}
-
- };
 
 int main()
 {
@@ -571,6 +521,7 @@ int main()
 
     t.PreorderTraversal(root);
     
+
            /* Functions to use for Trees*/
 
     //t.GetRoot(INSERTANODE);
@@ -580,7 +531,7 @@ int main()
     //t.Depth(INSERTANODE);
     //t.isEmpety(INSERTANODE);
     //t.isRoot(INSERTANODE);
-    //t.isLeaf(INSERTANODE)
+    //t.isLeaf(INSERTANODE);
     //t.DeleteNode(INSETANODE);
     //t.PreorderTraversal(INSERTANODE);
 
@@ -588,7 +539,6 @@ int main()
 
          /* GRAPH using matrix*/
     int graphSize = 4; //sets amount of start vertixes
-    int checknewsize= graphSize;
     GraphMatrix g(graphSize); //makes graph
      
     g.isEmpty();
@@ -630,8 +580,8 @@ int main()
     g.deleteEdge(1, 3);
     g.deleteEdge(0, 2);*/
 
-    //g.GetAdjacent(0);
-
+    g.GetAdjacent(0); 
+     
     g.deletionOfNode(2);
 
     g.VertexInfo(0);
@@ -649,26 +599,55 @@ int main()
     g.PrintTheMatrix(graphSize); //just to visualize
 
     g.addVertex(); //adds a vertex
-    checknewsize = checknewsize + 1;
+    
 
-    g.PrintTheMatrix(checknewsize+1); //just to visualize
+    // USED ALL COMMANDS FOR GRAPH HERE:
+    //GraphMatrix y(graphSize);
+
+    //y.addInfoInNodes("write whatever you want to store here",0); //vertix_index is from 0 to size-1 of the graph (ex. 0-3 for a graph with 4 vertices)
+    //y.changeInfoForNodes("write whatever you want to store here", 2);
+
+    //y.addVertex();//empty vertex created
+    //y.deletionOfNode(3); //delete a vertix
+
+    //y.addEdge(0, 2, 3);
+    //y.deleteEdge(1, 2);
+
+    //y.VertexInfo(0);
+    //y.GetAdjacent(0);
+    //y.VerticesInGraph();
+    //y.EdgesInGraph();
+
+    //y.size();
+    //y.isEmpty();
+
+    //y.BFS(0);
+
+    //cout << endl;
+    //y.PrintTheMatrix(graphSize);
+
 
     		/* Functions to use for Graphs*/
-    //Graph g(graphSize);
-    //g.addInfoInNodes(Vertix_index); //vertix_index is from 0 to size-1 of the graph (ex. 0-3 for a graph with 4 vertices)
+    //GraphMatrix g(graphSize);
+    
+    //g.addInfoInNodes("write whatever you want to store here",Vertix_index); //vertix_index is from 0 to size-1 of the graph (ex. 0-3 for a graph with 4 vertices)
+    //g.changeInfoForNodes("write whatever you want to store here", Vertix_index);
+    
+    //g.addVertex();//empty vertex created
+    //g.deletionOfNode(Vertix_index); //delete a vertix
+
     //g.addEdge(FromVertix, ToVertix, Weight);
     //g.deleteEdge(FromVertix, ToVertix);
-    //g.deletionOfNode(Vertix_index);
+   
     //g.VertexInfo(Vertix);
     //g.GetAdjacent(Vertix);
     //g.VerticesInGraph();
     //g.EdgesInGraph();
+    
     //g.size();
     //g.isEmpty();
+    
     //g.BFS(StartVertix);
-    //g.displayMatrix(graphSize);
-
-    //adds a vertex:
-    /*g.addVertex();
-    checknewsize = checknewsize + 1;*/
+   
+    //g.PrintTheMatrix(graphSize);
 }
