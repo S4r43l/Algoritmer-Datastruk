@@ -14,199 +14,220 @@ public:
     int data;
 	TreeNode* parent;
 	vector<TreeNode*>child;
-};
 
-//Insertion
-TreeNode* CreateTreeNode(int data, TreeNode* parent)
-{
-    TreeNode* newNode = new TreeNode();
-
-    newNode->data = data;
-    newNode->parent = parent;
-
-    if (parent != nullptr)
+    //Insertion
+    TreeNode* CreateTreeNode(int data, TreeNode* parent)
     {
-        parent->child.push_back(newNode);
-    }
+        TreeNode* newNode = new TreeNode();
 
-    return newNode;
-}
+        newNode->data = data;
+        newNode->parent = parent;
 
-//Deletion (deletes node + all children and their decendants
-void deleteNode(TreeNode* tree)
-{
-        // Delete the children and their descendants first
-    while (!tree->child.empty())
-    {
-        deleteNode(tree->child.back());
-    }
-
-    if (tree != nullptr && tree->parent != nullptr)
-    {
-        //removes the node
-		tree->parent->child.erase(remove(tree->parent->child.begin(),tree->parent->child.end(), tree), tree->parent->child.end());
-        //deletes the node
-        delete tree;
-
-        
-	}
-    else
-    {
-		cout << "Can't delete the root" << endl << endl;
-	}
-	cout << endl;
-}
-
-
-//Access functions
-TreeNode* GetRoot(TreeNode* tree)
-{
-    while (tree->parent != nullptr)
-    {
-        tree = tree->parent;
-    }
-
-    cout  << tree->data << ",is root" << endl;
-    cout << endl;
-
-    return tree;
-}
-
-TreeNode* GetParent(TreeNode* tree)
-{
-    if (tree->parent != nullptr)
-    {
-        tree = tree->parent;
-        cout << tree->data << " is the parent" << endl << endl;
-        return tree->parent;
-    }
-    else
-    {
-		cout << "Doesn't have a parent" << endl << endl;
-        return nullptr;
-	}
-    cout << endl;
-}
-
-void GetChildren(TreeNode* tree)
-{
-   
-    if (tree->child.empty())
-    {
-        cout << "It has no children" << endl;
-       
-    }
-
-    else
-    {
-        cout << "Children: ";
-        for (TreeNode* child : tree->child)
+        if (parent != nullptr)
         {
-            cout << child->data << " ";
+            parent->child.push_back(newNode);
+        }
+
+        return newNode;
+    }
+
+    //void InsertRandomNode(int data, TreeNode* tree)
+    //{
+    //    TreeNode* newNode = CreateTreeNode(data, tree); //create new
+
+    //    int random= rand() % (tree->child.size() + 1); //random number between 0 and the number of children
+
+    //    auto placement = tree->child.begin(); //iterator
+
+    //    for (int i = 0; i < random; ++i) { //inserts the node in a random position
+    //        if (placement == tree->child.end()) {
+
+    //            break;
+    //        }
+    //        ++placement;
+    //    }
+    //    tree->child.insert(placement, newNode); //inserts the node
+    //}
+
+    //Deletion (deletes node + all children and their decendants
+    void DeleteNode(TreeNode* tree)
+    {
+        // Delete the children and their descendants first
+        while (!tree->child.empty())
+        {
+            DeleteNode(tree->child.back());
+        }
+
+        if (tree != nullptr && tree->parent != nullptr)
+        {
+            //removes the node
+            tree->parent->child.erase(remove(tree->parent->child.begin(), tree->parent->child.end(), tree), tree->parent->child.end());
+            //deletes the node
+            delete tree;
+
+
+        }
+        else
+        {
+            cout << "Can't delete the root" << endl << endl;
         }
         cout << endl;
     }
-    cout << endl;
-    
-}
 
-//Query Functions
-void Size(TreeNode* tree)
-{
-    int size = 0;
-    stack<TreeNode*> Stack;
 
-    Stack.push(tree);
-
-    while (!Stack.empty()) 
+    //Access functions
+    TreeNode* GetRoot(TreeNode* tree)
     {
-		TreeNode* temp = Stack.top();
-		Stack.pop();
-
-		size++;
-
-        for (int i = temp->child.size() - 1; i >= 0; i--)
+        while (tree->parent != nullptr)
         {
-			Stack.push(temp->child[i]);
-		}
-	}
-    cout << "Size of tree: " << size << endl << endl;
+            tree = tree->parent;
+        }
 
-}
+        cout << tree->data << ",is root" << endl;
+        cout << endl;
 
-void Depth(TreeNode* tree)
-{
-	int depth = 1;
-    while (tree->parent != nullptr)
-    {
-		tree = tree->parent;
-		depth++;
-	}
-    	cout << "Depth of tree: " << depth << endl << endl;
-}
-
-void isEmpety(TreeNode* tree)
-{
-    if (tree->child.empty())
-    {
-        cout << "it is empty" << endl << endl;
+        return tree;
     }
-    else
+
+    TreeNode* GetParent(TreeNode* tree)
     {
-        cout << "it is not empty" << endl << endl;
-    }
-}
-
-void isRoot(TreeNode* tree)
-{
-    if (tree->parent != nullptr)
-    {
-        cout << "no, its not root!" << endl << endl;
-    }
-    else
-    {
-        cout << "yes, its root" << endl <<endl;
-    }
-}
-
-void isLeaf(TreeNode* tree)
-{
-    if (tree->child.size() == 0)
-    {
-		cout << "yes, its leaf" << endl << endl;
-	}
-    else
-    {
-		cout << "no, its not leaf" << endl << endl;
-	}
-
-}
-
-//Traversal
-void preorderTraversal(TreeNode* root)
-{
-    //DLR - data, left, right (preorder)
-    stack<TreeNode*> Stack;
-
-    Stack.push(root);
-
-    while (!Stack.empty()) {
-
-        TreeNode* temp = Stack.top();
-        Stack.pop();
-
-        cout << temp->data << " ";
-
-        for (int i = temp->child.size() - 1; i >= 0; i--) 
+        if (tree->parent != nullptr)
         {
-            Stack.push(temp->child[i]);
+            tree = tree->parent;
+            cout << tree->data << " is the parent" << endl << endl;
+            return tree->parent;
+        }
+        else
+        {
+            cout << "Doesn't have a parent" << endl << endl;
+            return nullptr;
+        }
+        cout << endl;
+    }
+
+    void GetChildren(TreeNode* tree)
+    {
+
+        if (tree->child.empty())
+        {
+            cout << "It has no children" << endl;
+
+        }
+
+        else
+        {
+            cout << "Children: ";
+            for (TreeNode* child : tree->child)
+            {
+                cout << child->data << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+
+    }
+
+    //Query Functions
+    void Size(TreeNode* tree)
+    {
+        int size = 0;
+        stack<TreeNode*> Stack;
+
+        Stack.push(tree);
+
+        while (!Stack.empty())
+        {
+            TreeNode* temp = Stack.top();
+            Stack.pop();
+
+            size++;
+
+            for (int i = temp->child.size() - 1; i >= 0; i--)
+            {
+                Stack.push(temp->child[i]);
+            }
+        }
+        cout << "Size of tree: " << size << endl << endl;
+
+    }
+
+    void Depth(TreeNode* tree)
+    {
+        int depth = 1;
+        while (tree->parent != nullptr)
+        {
+            tree = tree->parent;
+            depth++;
+        }
+        cout << "Depth of tree: " << depth << endl << endl;
+    }
+
+    void isEmpety(TreeNode* tree)
+    {
+        if (tree->child.empty())
+        {
+            cout << "it is empty" << endl << endl;
+        }
+        else
+        {
+            cout << "it is not empty" << endl << endl;
+        }
+    }
+
+    void isRoot(TreeNode* tree)
+    {
+        if (tree->parent != nullptr)
+        {
+            cout << "no, its not root!" << endl << endl;
+        }
+        else
+        {
+            cout << "yes, its root" << endl << endl;
+        }
+    }
+
+    void isLeaf(TreeNode* tree)
+    {
+        if (tree->child.size() == 0)
+        {
+            cout << "yes, its leaf" << endl << endl;
+        }
+        else
+        {
+            cout << "no, its not leaf" << endl << endl;
         }
 
     }
 
+    //Traversal
+    void PreorderTraversal(TreeNode* root)
+    {
+        //DLR - data, left, right (preorder)
+        stack<TreeNode*> Stack;
 
-    cout << endl;
-}
+        Stack.push(root);
+
+        while (!Stack.empty()) {
+
+            TreeNode* temp = Stack.top();
+            Stack.pop();
+
+            cout << temp->data << " ";
+
+            for (int i = temp->child.size() - 1; i >= 0; i--)
+            {
+                Stack.push(temp->child[i]);
+            }
+
+        }
+
+
+        cout << endl;
+    }
+
+};
+
+
 
 		/*  Graphs  */
 class Graph
@@ -224,8 +245,12 @@ public:
     {
         if (from >= 0 && from < adjacencyMatrix.size() && to >= 0 && to < adjacencyMatrix.size())
         {
-            adjacencyMatrix[from][to] = 1;
+            adjacencyMatrix[from][to] = weight;
         }
+        else
+        {
+			cout << "invalid edge" << endl << endl;
+		}
     }
 
     //deletion
@@ -237,10 +262,59 @@ public:
 		}
         else
         {
-            cout << "invalid edge." << endl << endl;
+            cout << "invalid edge" << endl << endl;
         }
 
 	}
+
+    //Access functions
+    void VertexInfo() 
+    {
+
+    }
+
+    void GetAdjacent(int vertex) //to get the adjacent vertices of a vertex
+    {
+        if (vertex >= 0 && vertex < adjacencyMatrix.size())
+        {
+			cout << "Adjacent vertices of " << vertex << ": ";
+
+            for (int i = 0; i < adjacencyMatrix.size(); i++)
+            {
+                if (adjacencyMatrix[vertex][i] != 0)
+                {
+					cout << i << " ";
+				}
+			}
+			cout << endl << endl;
+		}
+        else
+        {
+			cout << "invalid vertex" << endl << endl;
+		}
+	}
+
+    void VerticesInGraph() //to get the number of vertices in the graph
+    {
+        cout << "Number of vertices in graph: " << adjacencyMatrix.size() << endl << endl;
+    }
+
+    void EdgesInGraph()
+    {
+        int edges = 0;
+
+        for (int i = 0; i < adjacencyMatrix.size(); i++)
+        {
+            for (int j = 0; j < adjacencyMatrix.size(); j++)
+            {
+                if (adjacencyMatrix[i][j] != 0)
+                {
+			        edges++;
+				}
+			}
+		}
+		cout << "Number of edges in graph: " << edges << endl << endl;
+    }
 
     //Query Functions
     void size() //to get the size of the graph
@@ -265,7 +339,7 @@ public:
     {
         if (start < 0 || start >= adjacencyMatrix.size())
         {
-            cout << "invalid start node." << endl << endl;
+            cout << "invalid start node" << endl << endl;
             return;
         }
 
@@ -298,36 +372,42 @@ public:
 
 int main()
 {
+    
 			/*  TREE */
-    TreeNode* Root = CreateTreeNode(1, nullptr);
-    TreeNode* FirstChild = CreateTreeNode(2, Root);
-    TreeNode* SecondChild = CreateTreeNode(3, Root);
-    TreeNode* ThirdChild = CreateTreeNode(42, Root);
-    TreeNode* FourthChild = CreateTreeNode(5, SecondChild);
-    TreeNode* FifthChild = CreateTreeNode(6, SecondChild);
+    TreeNode t;
+
+    TreeNode* root = t.CreateTreeNode(0, nullptr);
+    TreeNode* FirstChild = t.CreateTreeNode(1, root);
+    TreeNode* SecondChild = t.CreateTreeNode(2, root);
+    TreeNode* ThirdChild = t.CreateTreeNode(3, root);
+    TreeNode* FourthChild = t.CreateTreeNode(4, SecondChild);
+    TreeNode* FifthChild = t.CreateTreeNode(5, SecondChild);
+
+    //t.InsertRandomNode(8, root); 
+    t.GetChildren(root); 
 
     
            /* Functions to use for Trees*/
 
-    //GetRoot(INSERTANODE);
+    //t.GetRoot(INSERTANODE);
 
-    //GetChildren(INSERTANODE);
+    //t.GetChildren(INSERTANODE);
    
-    //GetParent(INSERTANODE);
+    //t.GetParent(INSERTANODE);
 
-    //Size(INSERTANODE);
+    //t.Size(INSERTANODE);
 
-    //Depth(INSERTANODE);
+    //t.Depth(INSERTANODE);
 
-    //isEmpety(INSERTANODE);
+    //t.isEmpety(INSERTANODE);
 
-    //isRoot(INSERTANODE);
+    //t.isRoot(INSERTANODE);
 
-    //isLeaf(INSERTANODE)
+    //t.isLeaf(INSERTANODE)
 
-    //deleteNode(INSETANODE);
+    //t.DeleteNode(INSETANODE);
 
-    //preorderTraversal(INSERTANODE);
+    //t.PreorderTraversal(INSERTANODE);
 
          /* GRAPH*/
     int graphSize = 4;
