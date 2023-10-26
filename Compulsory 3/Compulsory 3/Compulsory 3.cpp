@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stack>
 #include <vector>
+#include <queue>
 using namespace std;
 
 		/*  TREES  */
@@ -210,16 +211,94 @@ void preorderTraversal(TreeNode* root)
 		/*  Graphs  */
 class Graph
 {
-	
+    vector<vector<int>> adjacencyMatrix;
+
+public:
+    Graph(int size) //set the size (number of vertices)
+    {
+        adjacencyMatrix.assign(size, vector<int>(size, 0));
+    }
+
+    //insertion
+    void addEdge(int from, int to, int weight) //to add an edge between two vertices
+    {
+        if (from >= 0 && from < adjacencyMatrix.size() && to >= 0 && to < adjacencyMatrix.size())
+        {
+            adjacencyMatrix[from][to] = 1;
+        }
+    }
+
+    //deletion
+    void deleteEdge(int from, int to) //to delete an edge between two vertices (between "from" to "to")
+    {
+        if (from >= 0 && from < adjacencyMatrix.size() && to >= 0 && to < adjacencyMatrix.size())
+        {
+			adjacencyMatrix[from][to] = 0; //set the edge to 0 (deletes it)
+		}
+        else
+        {
+            cout << "invalid edge." << endl << endl;
+        }
+
+	}
+
+    //Query Functions
+    void size() //to get the size of the graph
+    {
+		cout << "Size of graph: " << adjacencyMatrix.size() << endl << endl;
+	}
+
+    void isEmpty() //to check if the graph is empty
+    {
+        if (adjacencyMatrix.size() == 0)
+        {
+			cout << "The graph is empty" << endl << endl;
+		}
+       
+        {
+			cout << "The graph is not empty" << endl << endl;
+		}
+	}
+
+    //Traversal
+    void BFS(int start) //Breadth First Search
+    {
+        if (start < 0 || start >= adjacencyMatrix.size())
+        {
+            cout << "invalid start node." << endl << endl;
+            return;
+        }
+
+        vector<bool> visited(adjacencyMatrix.size(), false);
+        queue<int> queueBFS;
+
+        queueBFS.push(start);
+        visited[start] = true;
+
+        while (!queueBFS.empty())
+        {
+            int current = queueBFS.front();
+            queueBFS.pop();
+
+            cout << current << " ";
+
+            for (int i = 0; i < adjacencyMatrix.size(); i++)
+            {
+                if (adjacencyMatrix[current][i] == 1 && !visited[i])
+                {
+                    queueBFS.push(i);
+                    visited[i] = true;
+                }
+            }
+        }
+    }
           
 };
 
 
-
 int main()
 {
-
-			/*  TREES */
+			/*  TREE */
     TreeNode* Root = CreateTreeNode(1, nullptr);
     TreeNode* FirstChild = CreateTreeNode(2, Root);
     TreeNode* SecondChild = CreateTreeNode(3, Root);
@@ -250,7 +329,23 @@ int main()
 
     //preorderTraversal(INSERTANODE);
 
-         /* Functions to use for Graphs*/
+         /* GRAPH*/
+    int graphSize = 4;
+    Graph g(graphSize);
 
+    //adds 4 edges between 4 vertices
+    g.addEdge(0, 1, 2);
+    g.addEdge(1, 2, 3);
+    g.addEdge(2, 3, 5);
+    g.addEdge(3, 0, 6);
+
+    //adds two more edges between vertices with already a existing edge
+    g.addEdge(1, 3, 1);
+    g.addEdge(0, 2, 2);
+
+    //does a BSF traversal at 0
+    cout << "BFS: " << endl;
+    g.BFS(0);
+    cout << endl << endl;
 
 }
